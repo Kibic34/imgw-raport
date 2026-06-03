@@ -7,7 +7,7 @@ from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
 
 # ✅ ID folderu Google Drive (z URL!)
-FOLDER_ID = "1CSlQH2Oiq7lGk3dQ4olhPY5Lfq_rqzY0?usp=drive_link"
+FOLDER_ID = "1CSlQH2Oiq7lGk3dQ4olhPY5Lfq_rqzY0"
 
 URL = "https://hydro.imgw.pl/#/list/hydro?rpp=20&pf=0&c=229&cols=c,n,r,ic,csv,csd,tc,wv,dtw,dta,mdf,av"
 
