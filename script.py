@@ -7,7 +7,7 @@ from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
 
 # ✅ TU WKLEJ ID FOLDERU
-FOLDER_ID = "15PTzTmfvPhpTLvV4vrDbG7XEcLfuhKPG"
+FOLDER_ID = "15PTzTmfvPhpTLvV4vrDbG7XEcLfuhKPG?usp=sharing"
 
 URL = "https://hydro.imgw.pl/#/list/hydro?rpp=20&pf=0&c=229&cols=c,n,r,ic,csv,csd,tc,wv,dtw,dta,mdf,av"
 
