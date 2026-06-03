@@ -79,11 +79,13 @@ file_metadata = {
 
 media = MediaFileUpload(filename, mimetype="text/csv")
 
+
 file = service.files().create(
     body=file_metadata,
     media_body=media,
     fields="id",
-    supportsAllDrives=True  # ✅ KLUCZOWE!
+    supportsAllDrives=True,
+    ignoreDefaultVisibility=True
 ).execute()
 
 print(f"✅ Wysłano na Google Drive! ID: {file.get('id')}")
