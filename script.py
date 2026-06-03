@@ -36,7 +36,14 @@ with sync_playwright() as p:
     download = download_info.value
 
     # ✅ zapisz plik
-    download.save_as("raport.csv")
-    print("Zapisano raport.csv")
+    from datetime import datetime
+    
+    # ✅ aktualna data
+    today = datetime.now().strftime("%Y.%m.%d")
+
+    # ✅ nowa nazwa pliku
+    filename = f"{today}_RaportIMGW.csv"
+    download.save_as(filename)
+    print(f"Zapisano plik: {filename}
 
     browser.close()
