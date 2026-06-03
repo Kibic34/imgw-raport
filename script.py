@@ -79,12 +79,14 @@ file_metadata = {
 media = MediaFileUpload(filename, mimetype="text/csv")
 
 # ✅ KLUCZOWY fragment (Google fix)
+
 file = service.files().create(
     body=file_metadata,
     media_body=media,
     fields="id",
     supportsAllDrives=True,
-    ignoreDefaultVisibility=True
+    spaces="drive"
 ).execute()
+
 
 print(f"✅ Wysłano na Google Drive! ID: {file.get('id')}")
