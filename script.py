@@ -29,21 +29,23 @@ with sync_playwright() as p:
     # ✅ przejdź do przycisku
     button = download_icon.first.locator("xpath=ancestor::button")
 
-    # ✅ pobierz plik
+    
+    # ✅ przygotuj nazwę pliku z datą
+    today = datetime.now().strftime("%Y.%m.%d")
+    filename = f"{today}_RaportIMGW.csv"
+
     print("Klikam przycisk download...")
+
+    # ✅ pobierz plik
     with page.expect_download() as download_info:
         button.click(force=True)
 
     download = download_info.value
 
     # ✅ zapisz plik
-    
-    # ✅ aktualna data
-    today = datetime.now().strftime("%Y.%m.%d")
-    
-    # ✅ nowa nazwa pliku
-    filename = f"{today}_RaportIMGW.csv"
     download.save_as(filename)
-    print(f"Zapisano plik: {filename}
+
+  
+    print(f"Zapisano plik: {filename}")
 
     browser.close()
