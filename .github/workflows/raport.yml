@@ -1,25 +1,28 @@
-from playwright.sync_api import sync_playwright
+name: IMGW raport
 
-with sync_playwright() as p:
-    browser = p.chromium.launch()
-    page = browser.new_page()
+on:
+  schedule:
+    - cron: '0 4 * * *'  # codziennie (11:00 PL)
+  workflow_dispatch:
 
-    page.goto("https://hydro.imgw.pl/#/list/hydro?rpp=20&pf=0&c=229&cols=c,n,r,ic,csv,csd,tc,wv,dtw,dta,mdf,av")
+jobs:
+  run:
+    runs-on: ubuntu-latest
 
-    # poczekaj aż dane się załadują
-    page.wait_for_timeout(15000)
+    steps:
+      - uses: actions/checkout@v3
 
-    # ✅ kliknij ikonę "drukuj"
-    page.click("button[title='Drukuj']")
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
 
-    # ✅ poczekaj aż widok się zmieni (bardzo ważne)
-    page.wait_for_timeout(5000)
+      - run: pip install playwright
 
-    # ✅ TERAZ generujemy PDF (bez okna systemowego)
-    page.pdf(
-        path="raport.pdf",
-        format="A4",
-        print_background=True
-    )
+      - run: playwright install
 
-    browser.close()
+      - run: python script.py
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: raport-imgw
+          path: raport.pdf
