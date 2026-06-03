@@ -1,8 +1,6 @@
 name: IMGW raport
 
 on:
-  schedule:
-    - cron: '0 4 * * *'  # codziennie (11:00 PL)
   workflow_dispatch:
 
 jobs:
@@ -10,19 +8,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
           python-version: '3.10'
 
-      - run: pip install playwright
+      - name: Install dependencies
+        run: |
+          pip install playwright
+          playwright install chromium
 
-      - run: playwright install
+      - name: Run script
+        run: python script.py
 
-      - run: python script.py
-
-      - uses: actions/upload-artifact@v4
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
         with:
-          name: raport-imgw
-          path: raport.pdf
+          name: raport
+          path: |
+            raport.csv
+            debug.png
