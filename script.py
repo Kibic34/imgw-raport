@@ -10,13 +10,7 @@ with sync_playwright() as p:
     # czekaj aż dane się załadują
     page.wait_for_timeout(15000)
 
-    # kliknij ikonę drukowania (ważne!)
-    page.click("button[title='Drukuj']")
-
-    # poczekaj na zmianę widoku
-    page.wait_for_timeout(5000)
-
-    # zapisz PDF
-    page.pdf(path="raport.pdf", format="A4", print_background=True)
+    # kliknij ikonę Zapisz (ważne!)
+    page.click("button[title='Zapisz']")
 
     browser.close()
