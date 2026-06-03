@@ -31,3 +31,5 @@ jobs:
         with:
           name: raport
           path: '*.csv'
+
+pip install google-api-python-client google-auth google-auth-httplib2 google-auth-oauthlib
