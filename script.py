@@ -6,10 +6,14 @@ from google.oauth2.service_account import Credentials
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
 
-# ✅ TU WKLEJ ID FOLDERU
+# ✅ Wklej ID folderu z Google Drive (z URL)
 FOLDER_ID = "15PTzTmfvPhpTLvV4vrDbG7XEcLfuhKPG"
 
 URL = "https://hydro.imgw.pl/#/list/hydro?rpp=20&pf=0&c=229&cols=c,n,r,ic,csv,csd,tc,wv,dtw,dta,mdf,av"
+
+# =========================
+# ✅ POBIERANIE CSV
+# =========================
 
 with sync_playwright() as p:
     browser = p.chromium.launch(headless=True)
@@ -19,14 +23,20 @@ with sync_playwright() as p:
     print("Otwieranie strony...")
     page.goto(URL, timeout=60000)
 
+    # ✅ czekamy na tabelę
     page.wait_for_selector("table", timeout=120000)
     page.wait_for_timeout(5000)
 
+    # ✅ znajdź ikonę download
     download_icon = page.locator("span.pi.pi-download")
 
-    if download_icon.count() == 0:
+    count = download_icon.count()
+    print("Znaleziono ikon download:", count)
+
+    if count == 0:
         raise Exception("Nie znaleziono przycisku CSV!")
 
+    # ✅ przycisk
     button = download_icon.first.locator("xpath=ancestor::button")
 
     # ✅ nazwa pliku
@@ -35,6 +45,7 @@ with sync_playwright() as p:
 
     print("Klikam download...")
 
+    # ✅ pobranie pliku
     with page.expect_download() as download_info:
         button.click(force=True)
 
@@ -46,27 +57,19 @@ with sync_playwright() as p:
     browser.close()
 
 # =========================
-# ✅ GOOGLE DRIVE UPLOAD
+# ✅ UPLOAD DO GOOGLE DRIVE
 # =========================
 
 print("Upload na Google Drive...")
 
-SCOPES = ['https://www.googleapis.com/auth/drive.file']
+SCOPES = ["https://www.googleapis.com/auth/drive.file"]
 
 creds = Credentials.from_service_account_file(
-    'credentials.json',
+    "credentials.json",
     scopes=SCOPES
 )
 
-service = build('drive', 'v3', credentials=creds)
-
-file_metadata = {
-    'name': filename,
-    'parents': [FOLDER_ID]
-}
-
-media = MediaFileUpload(filename, mimetype='text/csv')
-
+service = build("drive", "v3", credentials=creds)
 
 file_metadata = {
     "name": filename,
@@ -80,7 +83,7 @@ file = service.files().create(
     body=file_metadata,
     media_body=media,
     fields="id",
-    supportsAllDrives=True
+    supportsAllDrives=True  # ✅ KLUCZOWE!
 ).execute()
 
-print(f"Wysłano na Drive: {file.get('id')}")
+print(f"✅ Wysłano na Google Drive! ID: {file.get('id')}")
