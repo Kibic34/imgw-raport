@@ -67,10 +67,20 @@ file_metadata = {
 
 media = MediaFileUpload(filename, mimetype='text/csv')
 
+
+file_metadata = {
+    "name": filename,
+    "parents": [FOLDER_ID],
+    "mimeType": "text/csv"
+}
+
+media = MediaFileUpload(filename, mimetype="text/csv")
+
 file = service.files().create(
     body=file_metadata,
     media_body=media,
-    fields='id'
+    fields="id",
+    supportsAllDrives=True
 ).execute()
 
 print(f"Wysłano na Drive: {file.get('id')}")
