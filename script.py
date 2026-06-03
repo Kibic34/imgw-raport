@@ -70,23 +70,31 @@ creds = Credentials.from_service_account_file(
 
 service = build("drive", "v3", credentials=creds)
 
+# ✅ 1. upload BEZ folderu
 file_metadata = {
     "name": filename,
-    "parents": [FOLDER_ID],
     "mimeType": "text/csv"
 }
 
 media = MediaFileUpload(filename, mimetype="text/csv")
 
-# ✅ KLUCZOWY fragment (Google fix)
-
 file = service.files().create(
     body=file_metadata,
     media_body=media,
     fields="id",
-    supportsAllDrives=True,
-    spaces="drive"
+    supportsAllDrives=True
 ).execute()
 
+file_id = file.get("id")
 
-print(f"✅ Wysłano na Google Drive! ID: {file.get('id')}")
+print(f"Plik utworzony: {file_id}")
+
+# ✅ 2. PRZENIESIENIE do folderu
+service.files().update(
+    fileId=file_id,
+    addParents=FOLDER_ID,
+    removeParents="root",
+    supportsAllDrives=True
+).execute()
+
+print("✅ Plik przeniesiony do folderu!")
