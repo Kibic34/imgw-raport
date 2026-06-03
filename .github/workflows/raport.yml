@@ -2,7 +2,7 @@ name: IMGW raport
 
 on:
   schedule:
-    - cron: '0 4 * * *'  # codziennie (06:00 PL)
+    - cron: '0 4 * * *'  # codziennie (20:42 PL)
   workflow_dispatch:
 
 jobs:
