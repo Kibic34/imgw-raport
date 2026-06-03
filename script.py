@@ -4,24 +4,42 @@ URL = "https://hydro.imgw.pl/#/list/hydro?rpp=20&pf=0&c=229&cols=c,n,r,ic,csv,cs
 
 with sync_playwright() as p:
     browser = p.chromium.launch(headless=True)
-    page = browser.new_page()
+    context = browser.new_context()
+    page = context.new_page()
 
     page.goto(URL, timeout=60000)
 
-    # ✅ poczekaj aż tabela się załaduje (kluczowe!)
+    # ✅ czekaj aż tabela się pojawi
     page.wait_for_selector("table", timeout=120000)
+    page.wait_for_timeout(5000)
 
-    # ✅ dodatkowy czas na Angular (ważne na CI)
-    page.wait_for_timeout(10000)
+    # ✅ znajdź ikonę drukowania
+    print_icon = page.locator("span.pi.pi-print")
 
-    # ✅ screenshot żeby zobaczyć co się dzieje
-    page.screenshot(path="debug.png", full_page=True)
+    # ✅ debug
+    count = print_icon.count()
+    print("Znaleziono ikon drukuj:", count)
 
-    # ✅ generuj PDF BEZ kliknięcia "Drukuj"
+    if count == 0:
+        raise Exception("Nie znaleziono ikony drukowania!")
+
+    # ✅ przejdź do przycisku (rodzica)
+    button = print_icon.first.locator("xpath=ancestor::button")
+
+    # ✅ kliknij
+    button.click(force=True)
+
+    # ✅ poczekaj aż widok się zmieni
+    page.wait_for_timeout(5000)
+
+    # ✅ PDF
     page.pdf(
         path="raport.pdf",
         format="A4",
         print_background=True
     )
+
+    # ✅ debug
+    page.screenshot(path="debug.png", full_page=True)
 
     browser.close()
