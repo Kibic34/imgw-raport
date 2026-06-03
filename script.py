@@ -49,3 +49,37 @@ with sync_playwright() as p:
     print(f"Zapisano plik: {filename}")
 
     browser.close()
+
+from google.oauth2.service_account import Credentials
+from googleapiclient.discovery import build
+from googleapiclient.http import MediaFileUpload
+
+# ✅ konfiguracja
+SCOPES = ['https://www.googleapis.com/auth/drive.file']
+SERVICE_ACCOUNT_FILE = 'credentials.json'
+
+# ✅ ID folderu (z URL Google Drive)
+FOLDER_ID = 'TU_WKLEJ_ID_FOLDERU'
+
+# ✅ autoryzacja
+creds = Credentials.from_service_account_file(
+    SERVICE_ACCOUNT_FILE, scopes=SCOPES
+)
+
+service = build('drive', 'v3', credentials=creds)
+
+# ✅ upload pliku
+file_metadata = {
+    'name': 'raport.csv',
+    'parents': [FOLDER_ID]
+}
+
+media = MediaFileUpload('raport.csv', mimetype='text/csv')
+
+file = service.files().create(
+    body=file_metadata,
+    media_body=media,
+    fields='id'
+).execute()
+
+print(f'Plik wrzucony do Google Drive, ID: {file.get("id")}')
