@@ -11,31 +11,34 @@ with sync_playwright() as p:
 
     # ✅ czekaj aż tabela się pojawi
     page.wait_for_selector("table", timeout=120000)
+
+    # ✅ dodatkowy czas dla Angulara (ważne na CI)
     page.wait_for_timeout(5000)
 
     # ✅ znajdź ikonę download
     download_icon = page.locator("span.pi.pi-download")
 
-    # debug (ważne)
     count = download_icon.count()
     print("Znaleziono ikon download:", count)
 
     if count == 0:
-        raise Exception("Nie znaleziono ikony download!")
+        raise Exception("Nie znaleziono przycisku eksportu CSV!")
 
-    # ✅ przejdź do przycisku (rodzica)
+    # ✅ weź pierwszy przycisk (lub zmień nth jeśli trzeba)
     button = download_icon.first.locator("xpath=ancestor::button")
 
-    # ✅ klik + przechwycenie pliku
+    # ✅ pobranie pliku
     with page.expect_download() as download_info:
         button.click(force=True)
 
     download = download_info.value
 
-    # ✅ zapisz plik CSV
+    # ✅ zapisz CSV
     download.save_as("raport.csv")
 
-    # ✅ debug screenshot
+    print("Plik zapisany jako raport.csv")
+
+    # ✅ debug (opcjonalnie)
     page.screenshot(path="debug.png", full_page=True)
 
     browser.close()
