@@ -6,7 +6,7 @@ from google.oauth2.service_account import Credentials
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
 
-# ✅ Wklej ID folderu z Google Drive (z URL)
+# ✅ ID folderu Google Drive (z URL!)
 FOLDER_ID = "1CSlQH2Oiq7lGk3dQ4olhPY5Lfq_rqzY0"
 
 URL = "https://hydro.imgw.pl/#/list/hydro?rpp=20&pf=0&c=229&cols=c,n,r,ic,csv,csd,tc,wv,dtw,dta,mdf,av"
@@ -36,16 +36,15 @@ with sync_playwright() as p:
     if count == 0:
         raise Exception("Nie znaleziono przycisku CSV!")
 
-    # ✅ przycisk
+    # ✅ klikamy przycisk
     button = download_icon.first.locator("xpath=ancestor::button")
 
-    # ✅ nazwa pliku
+    # ✅ dynamiczna nazwa pliku
     today = datetime.now().strftime("%Y.%m.%d")
     filename = f"{today}_RaportIMGW.csv"
 
     print("Klikam download...")
 
-    # ✅ pobranie pliku
     with page.expect_download() as download_info:
         button.click(force=True)
 
@@ -79,7 +78,7 @@ file_metadata = {
 
 media = MediaFileUpload(filename, mimetype="text/csv")
 
-
+# ✅ KLUCZOWY fragment (Google fix)
 file = service.files().create(
     body=file_metadata,
     media_body=media,
