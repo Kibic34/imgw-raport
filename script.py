@@ -4,7 +4,7 @@ URL = "https://hydro.imgw.pl/#/list/hydro?rpp=20&pf=0&c=229&cols=c,n,r,ic,csv,cs
 
 with sync_playwright() as p:
     browser = p.chromium.launch(headless=True)
-    context = browser.new_context()
+    context = browser.new_context(accept_downloads=True)
     page = context.new_page()
 
     page.goto(URL, timeout=60000)
@@ -13,33 +13,29 @@ with sync_playwright() as p:
     page.wait_for_selector("table", timeout=120000)
     page.wait_for_timeout(5000)
 
-    # ✅ znajdź ikonę drukowania
-    print_icon = page.locator("span.pi.pi-print")
+    # ✅ znajdź ikonę download
+    download_icon = page.locator("span.pi.pi-download")
 
-    # ✅ debug
-    count = print_icon.count()
-    print("Znaleziono ikon drukuj:", count)
+    # debug (ważne)
+    count = download_icon.count()
+    print("Znaleziono ikon download:", count)
 
     if count == 0:
-        raise Exception("Nie znaleziono ikony drukowania!")
+        raise Exception("Nie znaleziono ikony download!")
 
     # ✅ przejdź do przycisku (rodzica)
-    button = print_icon.first.locator("xpath=ancestor::button")
+    button = download_icon.first.locator("xpath=ancestor::button")
 
-    # ✅ kliknij
-    button.click(force=True)
+    # ✅ klik + przechwycenie pliku
+    with page.expect_download() as download_info:
+        button.click(force=True)
 
-    # ✅ poczekaj aż widok się zmieni
-    page.wait_for_timeout(5000)
+    download = download_info.value
 
-    # ✅ PDF
-    page.pdf(
-        path="raport.pdf",
-        format="A4",
-        print_background=True
-    )
+    # ✅ zapisz plik CSV
+    download.save_as("raport.csv")
 
-    # ✅ debug
+    # ✅ debug screenshot
     page.screenshot(path="debug.png", full_page=True)
 
     browser.close()
