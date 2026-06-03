@@ -23,7 +23,6 @@ with sync_playwright() as p:
     print("Znaleziono ikon download:", count)
 
     if count == 0:
-        page.screenshot(path="debug.png", full_page=True)
         raise Exception("Nie znaleziono przycisku CSV!")
 
     # ✅ przejdź do przycisku
