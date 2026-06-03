@@ -1,21 +1,16 @@
 from playwright.sync_api import sync_playwright
 
 with sync_playwright() as p:
-    browser = p.chromium.launch(headless=True)
+    browser = p.chromium.launch(headless=False, slow_mo=500)
     page = browser.new_page()
 
     page.goto("https://hydro.imgw.pl/#/list/hydro?rpp=20&pf=0&c=229&cols=c,n,r,ic,csv,csd,tc,wv,dtw,dta,mdf,av")
 
-    # ✅ czekaj aż przycisk naprawdę się pojawi
-    page.wait_for_selector("button[title='Drukuj']", timeout=120000)
+    page.wait_for_selector("button[title='Drukuj']", timeout=60000)
+    page.click("button[title='Drukuj']")
 
-    # ✅ kliknij dopiero wtedy
-    page.click("button[title='Drukuj']", force=True)
+    page.wait_for_timeout(5000)
 
-    # ✅ poczekaj aż coś się zmieni (opcjonalnie lepiej:)
-    page.wait_for_load_state("networkidle")
-
-    # ✅ PDF
     page.pdf(
         path="raport.pdf",
         format="A4",
