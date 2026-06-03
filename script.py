@@ -59,7 +59,7 @@ SCOPES = ['https://www.googleapis.com/auth/drive.file']
 SERVICE_ACCOUNT_FILE = 'credentials.json'
 
 # ✅ ID folderu (z URL Google Drive)
-FOLDER_ID = 'TU_WKLEJ_ID_FOLDERU'
+FOLDER_ID = 'raporty-imgw@elliptical-tree-498320-g4.iam.gserviceaccount.com'
 
 # ✅ autoryzacja
 creds = Credentials.from_service_account_file(
