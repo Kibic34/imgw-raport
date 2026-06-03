@@ -10,7 +10,7 @@ with sync_playwright() as p:
     page.wait_for_selector("button[title='Drukuj']", timeout=60000)
 
     # ✅ kliknij dopiero wtedy
-    page.click("button[title='Drukuj']")
+    page.locator("button:has-text('Drukuj')").click()
 
     # ✅ poczekaj aż coś się zmieni (opcjonalnie lepiej:)
     page.wait_for_load_state("networkidle")
