@@ -39,7 +39,4 @@ with sync_playwright() as p:
     download.save_as("raport.csv")
     print("Zapisano raport.csv")
 
-    # ✅ screenshot debug
-    page.screenshot(path="debug.png", full_page=True)
-
     browser.close()
