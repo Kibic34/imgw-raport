@@ -1,4 +1,5 @@
 from playwright.sync_api import sync_playwright
+from datetime import datetime
 
 URL = "https://hydro.imgw.pl/#/list/hydro?rpp=20&pf=0&c=229&cols=c,n,r,ic,csv,csd,tc,wv,dtw,dta,mdf,av"
 
@@ -36,11 +37,10 @@ with sync_playwright() as p:
     download = download_info.value
 
     # ✅ zapisz plik
-    from datetime import datetime
     
     # ✅ aktualna data
     today = datetime.now().strftime("%Y.%m.%d")
-
+    
     # ✅ nowa nazwa pliku
     filename = f"{today}_RaportIMGW.csv"
     download.save_as(filename)
