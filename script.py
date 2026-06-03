@@ -7,10 +7,10 @@ with sync_playwright() as p:
     page.goto("https://hydro.imgw.pl/#/list/hydro?rpp=20&pf=0&c=229&cols=c,n,r,ic,csv,csd,tc,wv,dtw,dta,mdf,av")
 
     # ✅ czekaj aż przycisk naprawdę się pojawi
-    page.wait_for_selector("button[title='Drukuj']", timeout=60000)
+    page.wait_for_selector("button[title='Drukuj']", timeout=120000)
 
     # ✅ kliknij dopiero wtedy
-    page.locator("button:has-text('Drukuj')").click()
+    page.click("button[title='Drukuj']", force=True)
 
     # ✅ poczekaj aż coś się zmieni (opcjonalnie lepiej:)
     page.wait_for_load_state("networkidle")
