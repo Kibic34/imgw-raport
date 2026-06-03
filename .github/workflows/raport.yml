@@ -3,7 +3,7 @@ name: IMGW raport
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 6 * * *'  # 08:00 w Polsce
+    - cron: '0 6 * * *'  # codziennie 08:00 czasu PL
 
 jobs:
   run:
@@ -23,7 +23,7 @@ jobs:
           pip install playwright google-api-python-client google-auth google-auth-httplib2 google-auth-oauthlib
           playwright install chromium
 
-      # ✅ tworzy plik credentials.json z secretu
+      # ✅ tworzy credentials.json z GitHub Secret
       - name: Create credentials file
         run: echo '${{ secrets.GOOGLE_CREDENTIALS }}' > credentials.json
 
