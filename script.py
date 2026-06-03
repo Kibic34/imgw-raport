@@ -7,13 +7,14 @@ with sync_playwright() as p:
     page.goto("https://hydro.imgw.pl/#/list/hydro?rpp=20&pf=0&c=229&cols=c,n,r,ic,csv,csd,tc,wv,dtw,dta,mdf,av")
 
     # poczekaj aż dane się załadują
-    page.wait_for_timeout(15000)
+    page.wait_for_selector("button[title='Drukuj']")
 
     # ✅ kliknij ikonę "drukuj"
     page.click("button[title='Drukuj']")
 
+    
     # ✅ poczekaj aż widok się zmieni (bardzo ważne)
-    page.wait_for_timeout(5000)
+    page.wait_for_timeout(7000)
 
     # ✅ TERAZ generujemy PDF (bez okna systemowego)
     page.pdf(
