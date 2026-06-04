@@ -3,8 +3,6 @@ name: IMGW raport
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '* * * * *'
 
 jobs:
   run:
