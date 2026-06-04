@@ -1,5 +1,5 @@
 # Test force scheduler
-name: IMGW raport v2
+name: IMGW raport
 
 on:
  workflow_dispatch:
