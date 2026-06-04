@@ -2,8 +2,10 @@
 name: IMGW raport v2
 
 on:
-  schedule:
-    - cron: '* * * * *'
+ workflow_dispatch:
+ schedule:
+    - cron: '0 6 * * *' # 8:00 Poland
+
 
 jobs:
   run:
