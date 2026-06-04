@@ -2,7 +2,6 @@
 name: IMGW raport v2
 
 on:
-  workflow_dispatch:
   schedule:
     - cron: '* * * * *'
 
