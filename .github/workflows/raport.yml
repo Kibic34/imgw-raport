@@ -27,10 +27,16 @@ jobs:
 
       # ✅ OAuth pliki
       - name: Create credentials file
-        run: echo '${{ secrets.GOOGLE_CLIENT_SECRET }}' > credentials.json
+        run: |
+          cat <<EOF > credentials.json
+          ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          EOF
 
-      - name: Create token file
-        run: echo '${{ secrets.GOOGLE_TOKEN }}' > token.json
+      - name: Create credentials file
+        run: |
+          cat <<EOF > token.json
+          ${{ secrets.GOOGLE_TOKEN }}
+          EOF
 
       - name: Run script
         run: python script.py
