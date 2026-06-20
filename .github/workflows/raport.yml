@@ -2,9 +2,8 @@
 name: IMGW raport
 
 on:
- workflow_dispatch:
- schedule:
-    - cron: '0 6 * * *' # 8:00 Poland
+ workflow_dispatch: # ✅ tylko ręczne uruchamianie (API / cron-job)
+ # zapisane: schedule: - cron: '0 6 * * *' # 8:00 Poland
 
 
 jobs:
